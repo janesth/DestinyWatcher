@@ -50,14 +50,19 @@ public class ConnectionBuilder {
                 return true;
             }
         } else {
-            updateLightInDB(user, light, classType, characterId);
+            insertLightInDB(user, light, classType, characterId);
             return true;
         }
         return false;
     }
 
-    private void updateLightInDB(String user, int light, int classType, long characterId) throws SQLException {
+    private void insertLightInDB(String user, int light, int classType, long characterId) throws SQLException {
         String query = "INSERT INTO power(user, light, classType, characterId) VALUES('" + user + "', '" + light + "', '" + classType + "', '" + characterId + "');";
+        statement.execute(query);
+    }
+
+    private void updateLightInDB(String user, int light, int classType, long characterId) throws SQLException {
+        String query = "UPDATE power SET light = '" + light + "' WHERE characterId = '" + characterId + "');";
         statement.execute(query);
     }
 
