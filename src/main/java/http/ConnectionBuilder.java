@@ -46,7 +46,7 @@ public class ConnectionBuilder {
             resultSet.next();
             int lightInDB = Integer.valueOf(resultSet.getString("light"));
             if (lightInDB < light) {
-                updateLightInDB(user, light, classType, characterId);
+                updateLightInDB(light, characterId);
                 return true;
             }
         } else {
@@ -61,8 +61,8 @@ public class ConnectionBuilder {
         statement.execute(query);
     }
 
-    private void updateLightInDB(String user, int light, int classType, long characterId) throws SQLException {
-        String query = "UPDATE power SET light = '" + light + "' WHERE characterId = '" + characterId + "');";
+    private void updateLightInDB(int light, long characterId) throws SQLException {
+        String query = "UPDATE power SET light = '" + light + "' WHERE characterId = '" + characterId + "'";
         statement.execute(query);
     }
 

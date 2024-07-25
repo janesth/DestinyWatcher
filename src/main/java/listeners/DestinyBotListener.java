@@ -61,6 +61,7 @@ public class DestinyBotListener extends ListenerAdapter {
                     for (Map.Entry<String, CharacterResponse> characterResponseEntry : responseData.getResponse().getCharacters().getData().entrySet()) {
                         CharacterResponse characterResponse = characterResponseEntry.getValue();
                         if (connectionBuilder.isLightHigher(approvedId.getKey(), characterResponse.getLight(), characterResponse.getClassType(), characterResponse.getCharacterId())) {
+                            System.out.println("DEBUG: ApproveID: " + approvedId.getKey() + " / " + approvedId.getValue() + "\nLight: " + characterResponse.getLight() + "\nClasstype: " + characterResponse.getClassType() + "\nCharacterID: " + characterResponse.getCharacterId());
                             switch (characterResponse.getClassType()) {
                                 case 0:
                                     textChannel.sendMessage("**" + approvedId.getKey() + "**'s Titan has a new power level: " + characterResponse.getLight()).queue();
@@ -79,12 +80,12 @@ public class DestinyBotListener extends ListenerAdapter {
                     }
                 }
             }
-        } catch (SQLException exception) {
-            System.out.println("Nice. Some database exception.");
+        } catch (SQLException ex) {
+            System.out.println("SQLException thrown: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Nice. Some error.");
+            System.out.println("IOException thrown: " + ex.getMessage());
         } catch (InterruptedException ex) {
-            System.out.println("Nice. Some other error.");
+            System.out.println("InterruptedException thrown: " + ex.getMessage());
         }
     }
 

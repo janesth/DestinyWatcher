@@ -32,11 +32,11 @@ public class StartUp {
             jda.getPresence().setActivity(Activity.playing("YOINC.ch"));
             jda.awaitReady();
         } catch (SQLException ex) {
-            System.out.println("Nice. Problems with the database.");
+            System.out.println("SQLException thrown: " + ex.getMessage());
         } catch (InterruptedException ex) {
-            System.out.println("Nice. Something interrupted the connection.");
+            System.out.println("InterruptedException thrown: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Nice. Problems with that property.");
+            System.out.println("IOException thrown: " + ex.getMessage());
         }
     }
 }
