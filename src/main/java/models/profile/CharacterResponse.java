@@ -7,6 +7,15 @@ public class CharacterResponse {
     private long classHash;
     private int classType;
     private int light;
+    private String emblemPath;
+
+    public String getEmblemPath() {
+        return emblemPath;
+    }
+
+    public void setEmblemPath(String emblemPath) {
+        this.emblemPath = emblemPath;
+    }
 
     public int getBaseCharacterLevel() {
         return baseCharacterLevel;

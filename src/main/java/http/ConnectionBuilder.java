@@ -12,16 +12,10 @@ import java.sql.*;
 import java.util.Properties;
 
 public class ConnectionBuilder {
-
     Properties properties;
-    Connection connection;
-    Statement statement;
 
     public ConnectionBuilder(Properties properties) throws SQLException {
         this.properties = properties;
-        connection = DriverManager.getConnection(properties.getProperty("db.url"));
-        statement = connection.createStatement();
-        setupConnection();
     }
 
     public ResponseData getPowerlevel(String membershipId) throws IOException, InterruptedException {
@@ -36,38 +30,17 @@ public class ConnectionBuilder {
         return new Gson().fromJson(response.body(), ResponseData.class);
     }
 
-    public boolean isLightHigher(String user, int light, int classType, long characterId) throws SQLException {
-        String query = "SELECT count(*) AS totalCount FROM power WHERE characterId = '" + characterId + "'";
-        ResultSet resultSet = statement.executeQuery(query);
-        resultSet.next();
-        if (resultSet.getInt("totalCount") == 1) {
-            query = "SELECT * FROM power WHERE characterId = '" + characterId + "'";
-            resultSet = statement.executeQuery(query);
-            resultSet.next();
-            int lightInDB = Integer.valueOf(resultSet.getString("light"));
-            if (lightInDB < light) {
-                updateLightInDB(light, characterId);
-                return true;
-            }
-        } else {
-            insertLightInDB(user, light, classType, characterId);
-            return true;
-        }
-        return false;
-    }
+    public ResponseData getUsersFromGuild() throws IOException, InterruptedException {
+        //TODO you know what to do here
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request;
+        request = HttpRequest.newBuilder()
+                .uri(URI.create("some bungie URL to receive only one guild"))
+                .header("X-API-Key", properties.getProperty("bungie.apiToken"))
+                .build();
 
-    private void insertLightInDB(String user, int light, int classType, long characterId) throws SQLException {
-        String query = "INSERT INTO power(user, light, classType, characterId) VALUES('" + user + "', '" + light + "', '" + classType + "', '" + characterId + "');";
-        statement.execute(query);
-    }
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return new Gson().fromJson(response.body(), ResponseData.class);
 
-    private void updateLightInDB(int light, long characterId) throws SQLException {
-        String query = "UPDATE power SET light = '" + light + "' WHERE characterId = '" + characterId + "'";
-        statement.execute(query);
-    }
-
-    private void setupConnection() throws SQLException {
-        String query = "CREATE TABLE IF NOT EXISTS power (power_id int PRIMARY KEY AUTO_INCREMENT, user varchar(50) NOT NULL, light varchar(200) NOT NULL, classType varchar(200) NOT NULL, characterId varchar(200) NOT NULL)";
-        statement.execute(query);
     }
 }
